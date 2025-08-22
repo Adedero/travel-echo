@@ -43,7 +43,10 @@ export default defineApi(
       await Promise.all([
         // remove like record
         like.deleteOne(),
-        CommentModel.updateOne({ _id: postId }, { $inc: { likeCount: -1 } })
+        CommentModel.updateOne(
+          { _id: commentId, post: postId },
+          { $inc: { likeCount: -1 } }
+        )
       ]);
 
       isLiked = false;
@@ -56,7 +59,10 @@ export default defineApi(
           comment: commentId,
           target: LikeTarget.Comment
         }),
-        PostModel.updateOne({ _id: postId }, { $inc: { likeCount: 1 } })
+        PostModel.updateOne(
+          { _id: commentId, post: postId },
+          { $inc: { likeCount: 1 } }
+        )
       ]);
 
       isLiked = true;
